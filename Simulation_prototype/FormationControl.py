@@ -60,7 +60,7 @@ for i in range(1,numSteps+1):
     # Each agent measures the relative distances and sends one measurement to another agent to complete the triangle
     current_d = pu.distances(currPositions_global)
 
-    for j in range(numAgents):          # TODO Only works with 2 neighbors
+    for j in range(numAgents):
 
         # Using the previous relative positions and the current distances each agent calculate the current relative distances (substitutes the prev with the updated)
         currPositions_local = pu.calculate_relative_positions(prevPositions_local[j], current_d, j, movement[j])

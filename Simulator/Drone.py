@@ -45,7 +45,7 @@ class Drone:
             # Measure distances form others agents and send/receive the distance between the 2 it can't measure locally
             current_d = self.currPositions_global_ref.get_distances_with_id_with_noise(self.id)
 
-            send_message, recv_condition = create_message(self.id, current_d)
+            send_message, recv_condition = create_message(self.id, current_d)           # TODO only works with 2 neighbors
             yield self.message_bus.put(send_message)
 
             recv_message = yield self.message_bus.get(recv_condition)
