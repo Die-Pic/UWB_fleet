@@ -13,6 +13,8 @@ addresses_to_distance = {
     ('0xABCD', '0x1234'): 1000,
     ('0xABCD', '0x5678'): 1000,
     ('0x1234', '0x5678'): 1500,
+    ('0x46BA', '0x541D'): 800,
+    ('0x541D', '0x46BA'): 800,
 }   # TODO add mappings here
 
 
@@ -36,11 +38,17 @@ def open_serial(port):
 
 def parse_line(line):
     # TODO just an example, add parse actual line to values
-    parts = line.split(',')
-    raw = int(parts[0])
-    addr = parts[1]
-    pwr = float(parts[2])
-    return raw, addr, pwr
+    parts = line.split(' ')
+    addr = parts[0].upper()
+    raw = parts[1]
+
+    # Check measuring is correct
+    if raw == 'RNG':
+        return 0, 0
+
+    raw = int(raw)
+    #pwr = float(parts[2])
+    return raw, addr, 0
 
 
 def main():
@@ -60,7 +68,11 @@ def main():
                 if not line:
                     continue
 
-                raw_dist, target_address, power = parse_line(line)
+                target_address, raw_dist, power = parse_line(line)
+
+                if raw_dist == 0:
+                    continue
+
                 true_dist = addresses_to_distance[(source_addr, target_address)]
                 if true_dist is None:
                     print(f"Unknown address {target_address}, skipping")
