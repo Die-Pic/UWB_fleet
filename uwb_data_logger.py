@@ -39,8 +39,8 @@ def open_serial(port):
 def parse_line(line):
     # TODO just an example, add parse actual line to values
     parts = line.split(' ')
-    addr = parts[0].upper()
-    raw = parts[1]
+    addr = parts[1].split('>')[1]
+    raw = parts[2]
     print("addr:",addr, "raw:", raw)
 
     # Check measuring is correct
