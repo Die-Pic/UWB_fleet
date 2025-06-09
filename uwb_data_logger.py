@@ -45,11 +45,11 @@ def parse_line(line):
 
     # Check measuring is correct
     if raw == 'RNG':
-        return 0, 0
+        return 0, 0, 0
 
     raw = int(raw)
     #pwr = float(parts[2])
-    return raw, addr, 0
+    return addr, raw, 0
 
 
 def main():
