@@ -10,11 +10,11 @@ OUTPUT_TMPL = 'uwb_dataset_'
 
 # Map of board addresses to real distances (mm)
 addresses_to_distance = {
-    ('0xABCD', '0x1234'): 1000,
-    ('0xABCD', '0x5678'): 1000,
-    ('0x1234', '0x5678'): 1500,
-    ('0x46BA', '0x541D'): 800,
-    ('0x541D', '0x46BA'): 800,
+    ('ABCD', '1234'): 1000,
+    ('ABCD', '5678'): 1000,
+    ('1234', '5678'): 1500,
+    ('46BA', '541D'): 800,
+    ('541D', '46BA'): 800,
 }   # TODO add mappings here
 
 
