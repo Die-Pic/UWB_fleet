@@ -41,6 +41,7 @@ def parse_line(line):
     parts = line.split(' ')
     addr = parts[0].upper()
     raw = parts[1]
+    print(addr, raw)
 
     # Check measuring is correct
     if raw == 'RNG':
