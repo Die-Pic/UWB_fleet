@@ -18,6 +18,9 @@ class Formation:
     def get_positions(self):
         return self.currentFormation.copy()
 
+    def get_position(self, drone_id: int):
+        return self.currentFormation[drone_id].copy()
+
 
     def get_num_agents(self):
         return self.currentFormation.shape[0]
