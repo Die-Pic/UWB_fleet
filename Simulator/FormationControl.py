@@ -76,7 +76,7 @@ def obtain_relative_positions(drone: Drone, movement: float, number_of_movements
 
 def movement_step(formation: frm.Formation, drone_id: int, movement):
     formation.update_position(drone_id, movement)
-    distances = formation.get_distances_with_id(drone_id)
+    distances = formation.get_distances_with_id_with_noise(drone_id)
 
     return np.delete(distances[drone_id], drone_id, axis=0)
 

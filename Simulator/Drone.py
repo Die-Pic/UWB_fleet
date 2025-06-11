@@ -43,7 +43,7 @@ class Drone:
     def run(self):
         # Initial routine to calculate the relative positions of the other agents
         number_of_movements =  4
-        amount_of_movement = 10
+        amount_of_movement = 30.0
         self.currPositions_local = fc.obtain_relative_positions(self, amount_of_movement, number_of_movements)
         self.prevPositions_local = self.currPositions_local
         yield self.env.timeout(0)               # TODO make it actually take time

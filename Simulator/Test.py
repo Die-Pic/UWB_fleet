@@ -33,6 +33,6 @@ if __name__ == "__main__":
                  param_k=parameter_k,
                  timeStep=stepTime)
 
-    relative_positions = fc.obtain_relative_positions(d, 10.0, 3)
+    relative_positions = fc.obtain_relative_positions(d, 30.0, 4)
     print(relative_positions)
 
