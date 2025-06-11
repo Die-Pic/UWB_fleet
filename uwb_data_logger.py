@@ -10,12 +10,19 @@ OUTPUT_TMPL = 'uwb_dataset_'
 
 # Map of board addresses to real distances (mm)
 addresses_to_distance = {
-    ('ABCD', '1234'): 1000,
-    ('ABCD', '5678'): 1000,
-    ('1234', '5678'): 1500,
-    ('46BA', '541D'): 800,
-    ('541D', '46BA'): 800,
-}   # TODO add mappings here
+    ('46BA', '0A1D'): 1300,
+    ('46BA', '541D'): 1430,
+    ('46BA', '1D85'): 1310,
+    ('0A1D', '46BA'): 1300,
+    ('0A1D', '541D'): 1260,
+    ('0A1D', '1D85'): 1910,
+    ('541D', '46BA'): 1430,
+    ('541D', '0A1D'): 1260,
+    ('541D', '1D85'): 935,
+    ('1D85', '46BA'): 1310,
+    ('1D85', '0A1D'): 1910,
+    ('1D85', '541D'): 935,
+}
 
 
 def parse_args():
@@ -37,31 +44,34 @@ def open_serial(port):
 
 
 def parse_line(line):
-    # TODO just an example, add parse actual line to values
     parts = line.split(' ')
     addr = parts[1].split('>')[1].upper()
-    raw = parts[2]
-    print("addr:",addr, "raw:", raw)
 
-    # Check measuring is correct
-    if raw == 'RNG':
-        return 0, 0, 0
+    measured_distances = parts[2].split('/')
+    if measured_distances[0] == 'RNG':
+        return 0, 0, 0, 0, 0, 0
+    measure_distance = int(measured_distances[0])
+    measure_distance_no_drift = int(measured_distances[1])
 
-    raw = int(raw)
-    #pwr = float(parts[2])
-    return addr, raw, 0
+    drift = int(parts[3].split(':')[1])
+
+    ip = parts[4].split(':')[1].split('/')
+    fp_power = int(ip[0])
+    rx_power = int(ip[1])
+
+    return addr, measure_distance, measure_distance_no_drift, drift, fp_power, rx_power
 
 
 def main():
     args = parse_args()
     ser = open_serial(args.port)
 
-    source_addr = args.addr
+    source_addr = args.addr.upper()
     output_csv = OUTPUT_TMPL + source_addr + '.csv'
 
     with open(output_csv, mode='w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['timestamp', 'raw_distance_m', 'true_distance_m', 'power'])
+        writer.writerow(['timestamp', 'measured_distance_mm', 'measured_distance_without_drift_mm', 'true_distance_mm', 'drift_ppm', 'FP_power', 'RX_power'])
 
         try:
             while True:
@@ -69,20 +79,19 @@ def main():
                 if not line:
                     continue
 
-                target_address, raw_dist, power = parse_line(line)
+                target_address, measure_distance, measure_distance_no_drift, drift, fp_power, rx_power = parse_line(line)
 
-                if raw_dist == 0:
+                if target_address == 0:
                     continue
 
-                true_dist = addresses_to_distance[(source_addr, target_address)]
-                if true_dist is None:
-                    print(f"Unknown address {target_address}, skipping")
+                true_distance = addresses_to_distance[(source_addr, target_address)]
+                if true_distance is None:
+                    print("Unknown address, skipping")
                     continue
 
                 timestamp = datetime.now().isoformat()
-                writer.writerow([timestamp, f"{raw_dist:.3f}", f"{true_dist:.3f}", power])
+                writer.writerow([timestamp, measure_distance, measure_distance_no_drift, true_distance, drift, fp_power, rx_power])
                 csvfile.flush()
-                print(f"Logged: {timestamp}, raw={raw_dist:.3f}, true={true_dist:.3f}, pwr={power}")
 
         except KeyboardInterrupt:
             print("Stopping logging...")
