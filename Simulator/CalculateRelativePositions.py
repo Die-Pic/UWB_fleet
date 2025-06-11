@@ -36,7 +36,7 @@ def calculate_relative_positions(prevPositions, currDistances, ref_agent, moveme
     # Solve system
     def eq_system(p):
         num_neighbors = int(p.shape[0]/2)
-        scale = 80.0
+        scale = currDistances.max()**2
         ret = []
 
         # Equations for current distances and distance difference

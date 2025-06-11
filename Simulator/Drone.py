@@ -30,7 +30,7 @@ class Drone:
         self.currPositions_global_ref = currPositions_global_ref
 
         # Local view of the position of the other agents
-        self.currPositions_local = currPositions_global_ref.get_positions() - currPositions_global_ref.get_positions()[drone_id]
+        self.currPositions_local = currPositions_global_ref.get_positions() - currPositions_global_ref.get_position(drone_id)
         self.prevPositions_local = self.currPositions_local.copy()
 
         # Movement for a step
@@ -41,6 +41,13 @@ class Drone:
 
 
     def run(self):
+        # Initial routine to calculate the relative positions of the other agents
+        number_of_movements =  4
+        amount_of_movement = 30.0
+        self.currPositions_local = fc.obtain_relative_positions(self, amount_of_movement, number_of_movements)
+        self.prevPositions_local = self.currPositions_local
+        yield self.env.timeout(0)               # TODO make it actually take time
+
         while True:
             # Measure distances form others agents and send/receive the distance between the 2 it can't measure locally
             current_d = self.currPositions_global_ref.get_distances_with_id_with_noise(self.id)

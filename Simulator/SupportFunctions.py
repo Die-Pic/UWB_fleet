@@ -17,7 +17,7 @@ def distances(positions):
     for i in range(dim):
         for j in range(i+1, dim):
             distance = np.linalg.norm(positions[i] - positions[j])
-            noise = np.random.uniform(-10, 5)
+            noise = 0#np.random.uniform(-10, 5)
             dist[i, j] = distance + noise
             dist[j, i] = distance + noise       # Ensure symmetry
     return dist
