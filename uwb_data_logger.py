@@ -12,16 +12,16 @@ OUTPUT_TMPL = 'uwb_dataset_'
 addresses_to_distance = {
     ('46BA', '0A1D'): 1300,
     ('46BA', '541D'): 1430,
-    ('46BA', '1D85'): 1310,
+    ('46BA', '1DB5'): 1310,
     ('0A1D', '46BA'): 1300,
     ('0A1D', '541D'): 1260,
-    ('0A1D', '1D85'): 1910,
+    ('0A1D', '1DB5'): 1910,
     ('541D', '46BA'): 1430,
     ('541D', '0A1D'): 1260,
-    ('541D', '1D85'): 935,
-    ('1D85', '46BA'): 1310,
-    ('1D85', '0A1D'): 1910,
-    ('1D85', '541D'): 935,
+    ('541D', '1DB5'): 935,
+    ('1DB5', '46BA'): 1310,
+    ('1DB5', '0A1D'): 1910,
+    ('1DB5', '541D'): 935,
 }
 
 
@@ -80,13 +80,11 @@ def main():
                     continue
 
                 target_address, measure_distance, measure_distance_no_drift, drift, fp_power, rx_power = parse_line(line)
-
                 if target_address == 0:
                     continue
 
                 true_distance = addresses_to_distance[(source_addr, target_address)]
                 if true_distance is None:
-                    print("Unknown address, skipping")
                     continue
 
                 timestamp = datetime.now().isoformat()
