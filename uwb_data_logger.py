@@ -10,18 +10,18 @@ OUTPUT_TMPL = 'uwb_dataset_'
 
 # Map of board addresses to real distances (mm)
 addresses_to_distance = {
-    ('46BA', '0A1D'): 1300,
-    ('46BA', '541D'): 1430,
-    ('46BA', '1DB5'): 1310,
-    ('0A1D', '46BA'): 1300,
-    ('0A1D', '541D'): 1260,
-    ('0A1D', '1DB5'): 1910,
-    ('541D', '46BA'): 1430,
-    ('541D', '0A1D'): 1260,
-    ('541D', '1DB5'): 935,
-    ('1DB5', '46BA'): 1310,
-    ('1DB5', '0A1D'): 1910,
-    ('1DB5', '541D'): 935,
+    ('46BA', '0A1D'): 1220,
+    ('46BA', '541D'): 1180,
+    ('46BA', '1DB5'): 1550,
+    ('0A1D', '46BA'): 1220,
+    ('0A1D', '541D'): 1595,
+    ('0A1D', '1DB5'): 1125,
+    ('541D', '46BA'): 1180,
+    ('541D', '0A1D'): 1595,
+    ('541D', '1DB5'): 940,
+    ('1DB5', '46BA'): 1550,
+    ('1DB5', '0A1D'): 1125,
+    ('1DB5', '541D'): 940,
 }
 
 
@@ -74,7 +74,8 @@ def main():
         writer.writerow(['timestamp', 'measured_distance_mm', 'measured_distance_without_drift_mm', 'true_distance_mm', 'drift_ppm', 'FP_power', 'RX_power'])
 
         try:
-            while True:
+            samples = 0
+            while samples < 110000:
                 line = ser.readline().decode('utf-8', errors='ignore').strip()
                 if not line:
                     continue
@@ -90,6 +91,7 @@ def main():
                 timestamp = datetime.now().isoformat()
                 writer.writerow([timestamp, measure_distance, measure_distance_no_drift, true_distance, drift, fp_power, rx_power])
                 csvfile.flush()
+                samples += 1
 
         except KeyboardInterrupt:
             print("Stopping logging...")
