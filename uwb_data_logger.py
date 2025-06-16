@@ -44,22 +44,24 @@ def open_serial(port):
 
 
 def parse_line(line):
-    parts = line.split(' ')
-    addr = parts[1].split('>')[1].upper()
+    try:
+        parts = line.split(' ')
+        addr = parts[1].split('>')[1].upper()
 
-    measured_distances = parts[2].split('/')
-    if measured_distances[0] == 'RNG':
+        measured_distances = parts[2].split('/')
+        measure_distance = int(measured_distances[0])
+        measure_distance_no_drift = int(measured_distances[1])
+
+        drift = int(parts[3].split(':')[1])
+
+        ip = parts[4].split(':')[1].split('/')
+        fp_power = int(ip[0])
+        rx_power = int(ip[1])
+
+        return addr, measure_distance, measure_distance_no_drift, drift, fp_power, rx_power
+
+    except Exception as e:
         return 0, 0, 0, 0, 0, 0
-    measure_distance = int(measured_distances[0])
-    measure_distance_no_drift = int(measured_distances[1])
-
-    drift = int(parts[3].split(':')[1])
-
-    ip = parts[4].split(':')[1].split('/')
-    fp_power = int(ip[0])
-    rx_power = int(ip[1])
-
-    return addr, measure_distance, measure_distance_no_drift, drift, fp_power, rx_power
 
 
 def main():
