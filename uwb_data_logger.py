@@ -5,7 +5,6 @@ import argparse
 
 # Default configuration
 DEFAULT_SERIAL_PORT = '/dev/ttyACM0'   # replace if needed
-BAUD_RATE = 115200                     # fixed baud rate
 OUTPUT_TMPL = 'uwb_dataset_'
 
 # Map of board addresses to real distances (mm)
@@ -37,7 +36,7 @@ def parse_args():
 
 def open_serial(port):
     try:
-        return serial.Serial(port, BAUD_RATE, timeout=1)
+        return serial.Serial(port, timeout=1)
     except serial.SerialException as e:
         print(f"Error opening serial port {port}: {e}")
         raise
