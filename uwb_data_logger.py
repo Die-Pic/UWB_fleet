@@ -44,6 +44,7 @@ def open_serial(port):
 
 def parse_line(line):
     parts = line.split(' ')
+    print(parts)
     addr = parts[1].split('>')[1].upper()
 
     measured_distances = parts[2].split('/')
