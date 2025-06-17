@@ -60,7 +60,8 @@ def parse_line(line):
 
         return addr, measure_distance, measure_distance_no_drift, drift, fp_power, rx_power
 
-    except Exception as e:
+    except IndexError as e:
+        print(e)
         return 0, 0, 0, 0, 0, 0
 
 
@@ -94,6 +95,7 @@ def main():
                 writer.writerow([timestamp, measure_distance, measure_distance_no_drift, true_distance, drift, fp_power, rx_power])
                 csvfile.flush()
                 samples += 1
+            ser.close()
 
         except KeyboardInterrupt:
             print("Stopping logging...")
