@@ -60,9 +60,11 @@ class Formation:
         for i in range(dim):
             for j in range(i + 1, dim):
                 distance = np.linalg.norm(self.currentFormation[i] - self.currentFormation[j])
-                noise = np.random.uniform(-10, 5)
-                dist[i, j] = distance + noise
-                dist[j, i] = distance + noise   # Ensure symmetry
+                noise_mm = np.random.normal(-16.6, np.sqrt(4843))
+                noise_cm = noise_mm / 10
+                #noise_cm = np.random.uniform(-10, 5)
+                dist[i, j] = distance + noise_cm
+                dist[j, i] = distance + noise_cm   # Ensure symmetry
         return dist
 
 
@@ -72,9 +74,11 @@ class Formation:
 
         for i in range(dim):
             distance = np.linalg.norm(self.currentFormation[i] - self.currentFormation[drone_id])
-            noise = np.random.uniform(-10, 5)
-            dist[i, drone_id] = distance + noise
-            dist[drone_id, i] = distance + noise    # Ensure symmetry
+            noise_mm = np.random.normal(-16.6, np.sqrt(4843))
+            noise_cm = noise_mm / 10
+            #noise_cm = np.random.uniform(-10, 5)
+            dist[i, drone_id] = distance + noise_cm
+            dist[drone_id, i] = distance + noise_cm    # Ensure symmetry
         return dist
 
 
