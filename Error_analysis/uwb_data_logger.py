@@ -72,12 +72,17 @@ def main():
     source_addr = args.addr.upper()
     output_csv = OUTPUT_TMPL + source_addr + '.csv'
 
-    with open(output_csv, mode='w', newline='') as csvfile:
+    with open(output_csv, mode='a', newline='') as csvfile:
+        # Count number of lines
+        lines = sum(1 for _ in csvfile)
+
         writer = csv.writer(csvfile)
-        writer.writerow(['timestamp', 'measured_distance_mm', 'measured_distance_without_drift_mm', 'true_distance_mm', 'drift_ppm', 'FP_power', 'RX_power'])
+        if lines == 0:
+            writer.writerow(['timestamp', 'measured_distance_mm', 'measured_distance_without_drift_mm', 'true_distance_mm', 'drift_ppm', 'FP_power', 'RX_power'])
+            lines += 1
 
         try:
-            samples = 0
+            samples = lines-1
             while samples < 110000:
                 line = ser.readline().decode('utf-8', errors='ignore').strip()
                 if not line:
