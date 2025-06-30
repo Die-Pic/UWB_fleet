@@ -4,7 +4,7 @@ The current_formation represents the global positions of the drones at the start
 
 Algorithm:
 1. At the start of the simulations the drones perform a routine to calculate the position of the other drones relative to their orientation system.
-   One drone at a time performes a set of movements (minimum of 3) and measure the distances to the others at different instants, those measures are then used to obtain the positions of the other drones.
+   One drone at a time performs a set of movements (minimum of 3) and measure the distances to the others at different instants, those measures are then used to obtain the positions of the other drones.
 2. Each drone measures the distance to the others and then receives the missing distance from another drone (e.g. drone_1 calculates the distances to drone_2 and drone_3 and then receive the distace between drone_2 and drone_3 from drone_3), all the drones sync at this step.
 3. Each drone then uses the distances to update the positions of the other drones (not needed the first time since the relative positions are calculated with the initial routine).
 4. Each drone uses the locally calculated positions info and desired formation distances to calculate the matrixe A and vector b (A represents the direction of the movement, b the amount of movement), using these matrixes it calculates the velocity vector that is needed to converge to (or maintain) the formation.
