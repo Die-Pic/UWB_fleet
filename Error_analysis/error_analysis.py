@@ -37,6 +37,7 @@ abs_err = np.abs(errors)
 corr_err_fp = correlation(errors, data[:, 5])
 corr_err_rx = correlation(errors, data[:, 6])
 corr_err_powDiff = correlation(errors, data[:, 6] - data[:, 5])
+corr_relErr_dist = correlation(errors/data[:, 3], data[:, 3])
 
 
 
@@ -50,10 +51,11 @@ print("Min absolute error:", abs_err.min(), "Max absolute error:", abs_err.max()
 print("Correlation error/fp_power:", corr_err_fp)
 print("Correlation error/rx_power:", corr_err_rx)
 print("Correlation error/powDiff:", corr_err_powDiff)
+print("Correlation error/dist:", corr_relErr_dist)
 print()
 
 # Per distance metrics
-for dist in (940, 1125, 1180, 1220, 1550, 1595):
+for dist in (550, 700, 940, 1125, 1180, 1220, 1550, 1595, 1700, 1880, 1900, 1915):
     print(dist, ":")
     dist_data = data[data[:, 3] == dist]
 
