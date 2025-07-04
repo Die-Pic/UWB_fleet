@@ -16,12 +16,28 @@ dfs = [
 big_df = pd.concat(dfs, ignore_index=True)
 data = big_df.to_numpy()
 
-errors = data[:, 1] - data[:, 3]
-if DISCARD_OUTLIERS:
-    mask = np.abs(errors) < OUTLIERS_THRESHOLD
-    errors = errors[mask]
 
+# Delete outliers
+if DISCARD_OUTLIERS:
+    errors = data[:, 1] - data[:, 3]
+    mask = np.abs(errors) < OUTLIERS_THRESHOLD
+
+    data = data[mask]
+    big_df = big_df[mask].reset_index(drop=True)
+
+# Calculate stuff
+def correlation(x, y):
+    return (
+                ((x - x.mean()) * (y - y.mean())).sum() /
+                (len(x)-1)
+            ) / (x.std(ddof=1) * y.std(ddof=1))
+
+errors = data[:, 1] - data[:, 3]
 abs_err = np.abs(errors)
+corr_err_fp = correlation(errors, data[:, 5])
+corr_err_rx = correlation(errors, data[:, 6])
+corr_err_powDiff = correlation(errors, data[:, 6] - data[:, 5])
+
 
 
 # General metrics
@@ -31,6 +47,9 @@ print(f"Mean: {errors.mean():.1f}  Absolute error mean: {abs_err.mean():.1f}")
 print(f"Variance: {errors.var():.1f}  Standard deviation: {np.sqrt(errors.var()):.1f}")
 print("Min error:", errors.min(), "Max error:", errors.max())
 print("Min absolute error:", abs_err.min(), "Max absolute error:", abs_err.max())
+print("Correlation error/fp_power:", corr_err_fp)
+print("Correlation error/rx_power:", corr_err_rx)
+print("Correlation error/powDiff:", corr_err_powDiff)
 print()
 
 # Per distance metrics
