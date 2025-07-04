@@ -1,4 +1,5 @@
 import serial
+import os
 import csv
 from datetime import datetime
 import argparse
@@ -72,11 +73,17 @@ def main():
     source_addr = args.addr.upper()
     output_csv = OUTPUT_TMPL + source_addr + '.csv'
 
-    with open(output_csv, mode='a', newline='') as csvfile:
-        # Count number of lines
-        lines = sum(1 for _ in csvfile)
+    # Count number of lines
+    if os.path.exists(output_csv):
+        with open(output_csv, 'r', newline='') as f:
+            lines = sum(1 for _ in f)
+    else:
+        lines = 0
 
+    with open(output_csv, mode='a', newline='') as csvfile:
         writer = csv.writer(csvfile)
+
+        # Empty file
         if lines == 0:
             writer.writerow(['timestamp', 'measured_distance_mm', 'measured_distance_without_drift_mm', 'true_distance_mm', 'drift_ppm', 'FP_power', 'RX_power'])
             lines += 1
