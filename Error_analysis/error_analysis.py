@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import glob
+import matplotlib.pyplot as plt
 
 DISCARD_OUTLIERS = True
 OUTLIERS_THRESHOLD = 1000
@@ -55,20 +56,26 @@ print("Correlation error/dist:", corr_relErr_dist)
 print()
 
 # Per distance metrics
-for dist in (550, 700, 940, 1125, 1180, 1220, 1550, 1595, 1700, 1880, 1900, 1915):
+distances = np.array([550, 620, 700, 820, 940, 1125, 1180, 1220, 1300, 1375, 1440, 1550, 1595, 1700, 1710, 1880, 1900, 1915])
+mean = []
+for dist in distances:
     print(dist, ":")
     dist_data = data[data[:, 3] == dist]
 
-    dist_errors = dist_data[:, 1] - dist_data[:, 3]
-    if DISCARD_OUTLIERS:
-        mask = np.abs(dist_errors) < OUTLIERS_THRESHOLD
-        dist_errors = dist_errors[mask]
+    dist_err = dist_data[:, 1] - dist_data[:, 3]
+    abs_dist_err = np.abs(dist_err)
+    mean.append(dist_err.mean())
 
-    abs_dist_err = np.abs(dist_errors)
-
-    print("Number of samples:", dist_errors.shape[0])
-    print(f"Mean: {dist_errors.mean():.1f}  Absolute error mean: {abs_dist_err.mean():.1f}")
-    print(f"Variance: {dist_errors.var():.1f}  Standard deviation: {np.sqrt(dist_errors.var()):.1f}")
-    print("Min error:", dist_errors.min(), "Max error:", dist_errors.max())
+    print("Number of samples:", dist_err.shape[0])
+    print(f"Mean: {dist_err.mean():.1f}  Absolute error mean: {abs_dist_err.mean():.1f}")
+    print(f"Variance: {dist_err.var():.1f}  Standard deviation: {np.sqrt(dist_err.var()):.1f}")
+    print("Min error:", dist_err.min(), "Max error:", dist_err.max())
     print("Min absolute error:", abs_dist_err.min(), "Max absolute error:", abs_dist_err.max())
     print()
+
+mean = np.array(mean)
+plt.xlabel("X")
+plt.ylabel("Y")
+plt.grid(True)
+plt.plot(distances, mean)
+plt.show()
