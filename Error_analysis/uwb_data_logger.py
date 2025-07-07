@@ -90,7 +90,7 @@ def main():
 
         try:
             samples = lines-1
-            while samples < 5000*3*3:
+            while samples < 5000*3*4:
                 line = ser.readline().decode('utf-8', errors='ignore').strip()
                 if not line:
                     continue
